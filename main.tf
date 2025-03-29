@@ -69,6 +69,12 @@ resource "aws_lb_listener" "http" {
   }
 }
 
+# Variáveis
+variable "vpc_id" {}
+variable "private_subnets" {
+  type = list(string)
+}
+
 # Outputs
 output "alb_dns_name" {
   value = aws_lb.fastfood_alb.dns_name
