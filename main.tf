@@ -1,14 +1,7 @@
 provider "aws" {
-  region = "us-east-1"
+  region = var.region
 }
 
-# Variáveis
-variable "vpc_id" {}
-variable "private_subnets" {
-  type = list(string)
-}
-
-# Security Group para o ALB
 resource "aws_security_group" "alb_sg" {
   name        = "fastfood-alb-sg"
   description = "Security group for internal ALB"
@@ -29,7 +22,6 @@ resource "aws_security_group" "alb_sg" {
   }
 }
 
-# Target Group
 resource "aws_lb_target_group" "backend_tg" {
   name        = "fastfood-tg"
   port        = 3000
@@ -48,7 +40,6 @@ resource "aws_lb_target_group" "backend_tg" {
   }
 }
 
-# Application Load Balancer (interno)
 resource "aws_lb" "fastfood_alb" {
   name               = "fastfood-alb"
   internal           = true
@@ -57,7 +48,6 @@ resource "aws_lb" "fastfood_alb" {
   subnets            = var.private_subnets
 }
 
-# Listener
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.fastfood_alb.arn
   port              = 80
@@ -67,23 +57,4 @@ resource "aws_lb_listener" "http" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.backend_tg.arn
   }
-}
-
-# Variáveis
-variable "vpc_id" {}
-variable "private_subnets" {
-  type = list(string)
-}
-
-# Outputs
-output "alb_dns_name" {
-  value = aws_lb.fastfood_alb.dns_name
-}
-
-output "alb_target_group_arn" {
-  value = aws_lb_target_group.backend_tg.arn
-}
-
-output "alb_sg_id" {
-  value = aws_security_group.alb_sg.id
 }
