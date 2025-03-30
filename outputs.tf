@@ -17,3 +17,7 @@ output "alb_listener_arn" {
   description = "ARN do Listener do ALB"
   value       = aws_lb_listener.http.arn
 }
+
+output "alb_dns" {
+  value = aws_lb.fastfood_alb.dns_name
+}
