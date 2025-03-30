@@ -15,3 +15,9 @@ variable "private_subnets" {
   type        = list(string)
   default     = []
 }
+
+variable "public_subnets" {
+  description = "Subnets públicas para o ALB"
+  type        = list(string)
+  default     = []
+}
